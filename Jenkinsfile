@@ -11,7 +11,7 @@ pipeline {
         TOMCAT_URL = 'http://localhost:8070'
     }
     
-    stages 
+    stages {
         stage('Clean Project') {
             steps {
                 bat "mvn clean"
@@ -25,30 +25,29 @@ pipeline {
         }
 
         stage('Deploy to Tomcat') {
-    steps {
-        script {
-            def warFilePath = "${WAR_FILE}"
-            echo "WAR file path: ${warFilePath}"
+            steps {
+                script {
+                    def warFilePath = "${WAR_FILE}"
+                    echo "WAR file path: ${warFilePath}"
 
-            if (fileExists(warFilePath)) {
-                echo 'WAR file found, deploying...'
+                    if (fileExists(warFilePath)) {
+                        echo 'WAR file found, deploying...'
 
-                withCredentials([usernamePassword(credentialsId: 'tomcat-creds',
-                                                  usernameVariable: 'TOMCAT_USER',
-                                                  passwordVariable: 'TOMCAT_PASSWORD')]) {
-                    bat """
-                        curl --upload-file "${warFilePath}" ^
-                        --user %TOMCAT_USER%:%TOMCAT_PASSWORD% ^
-                        "${TOMCAT_URL}/manager/text/deploy?path=/roshambo&update=true"
-                    """
+                        withCredentials([usernamePassword(credentialsId: 'tomcat-creds',
+                                                          usernameVariable: 'TOMCAT_USER',
+                                                          passwordVariable: 'TOMCAT_PASSWORD')]) {
+                            bat """
+                                curl --upload-file "${warFilePath}" ^
+                                --user %TOMCAT_USER%:%TOMCAT_PASSWORD% ^
+                                "${TOMCAT_URL}/manager/text/deploy?path=/roshambo&update=true"
+                            """
+                        }
+                    } else {
+                        error('WAR file not found!')
+                    }
                 }
-            } else {
-                error('WAR file not found!')
             }
         }
-    }
-}
-
     } // end stages
 
     post {

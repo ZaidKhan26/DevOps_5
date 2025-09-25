@@ -7,11 +7,11 @@ pipeline {
     }
     
     environment {
-        WAR_FILE = 'C:/Users/Admin/.jenkins/workspace/pipeline/target/roshambo.war'
-        TOMCAT_URL = 'http://localhost:7080'
+        WAR_FILE = 'C:/ProgramData/Jenkins/.jenkins/workspace/zaid/target/roshambo.war'
+        TOMCAT_URL = 'http://localhost:8070'
     }
     
-    stages {
+    stages 
         stage('Clean Project') {
             steps {
                 bat "mvn clean"

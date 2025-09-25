@@ -33,7 +33,7 @@ pipeline {
                     if (fileExists(warFilePath)) {
                         echo 'WAR file found, deploying...'
 
-                        withCredentials([usernamePassword(credentialsId: 'tomcat-creds',
+                        withCredentials([usernamePassword(credentialsId: 'tomcat creds',
                                                           usernameVariable: 'TOMCAT_USER',
                                                           passwordVariable: 'TOMCAT_PASSWORD')]) {
                             bat """
